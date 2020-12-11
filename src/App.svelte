@@ -1,6 +1,6 @@
 <script>
-	//@ts-check
-	let title = '';
+	let title;
+	let details;
 	let list = [];
 	const getAnime = () => {
 		fetch(`https://api.jikan.moe/v3/search/anime?q=${title}`)
@@ -9,7 +9,11 @@
 			console.log(data.results)
 			list = data.results
 		})
-	}
+	};
+
+	const submit = key => {
+		if (key.charCode === 13) getAnime();
+	};
 </script>
 
 <style>
@@ -33,15 +37,16 @@
 			max-width: 100%;
 		}
 	 }
+
 </style>
 
-<div class="d-flex justify-content-center text-center">
+<div class="d-flex justify-content-center text-center container-fluid">
 	<div>
 		<img class="img-fluid" src="images/banner.png" alt="banner">
-		<div class="input-group m-3">
-			<input class="form-control" type="text" name="title" bind:value={title} placeholder=
+		<div class="mt-4 mb-4">
+			<input on:keypress={submit} class="form-control col-lg-10 col-md-8 col-sm-6" type="text" name="title" bind:value={title} placeholder=
 			"Anime Name" aria-label="Search!" aria-describedby="searchButton">
-			<button class="btn btn-dark" id="searchButton" on:click={getAnime}>
+			<button class="btn btn-dark col-lg-2 col-md-4 col-sm-6" id="searchButton" on:click={getAnime}>
 				Search!
 			</button>
   	</div>
@@ -56,8 +61,9 @@
 	<div class="card-body">
 		<h5 class="card-title">{anime.title}</h5>
 		<p class="card-text">{anime.synopsis}</p>
-		<a href='/' class="btn btn-primary">Go somewhere</a>
 	</div>
 	</div>
+{:else}
+	<h1>Not Found</h1>
 {/each}
 </div>
